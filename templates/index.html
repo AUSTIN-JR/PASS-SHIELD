@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PassShield | Strength Checker & Generator</title>
+    <link rel="icon" type="image/png" href="/static/logo.png">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER WITH LOGO -->
+        <header>
+            <img src="/static/logo.png" alt="PassShield Logo" class="app-logo">
+            <h1>PassShield</h1>
+            <p class="tagline">Real-time strength analysis, pattern detection & secure generation</p>
+        </header>
+
+        <!-- NAVIGATION TABS -->
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="switchTab('check')">Check Strength</button>
+            <button class="tab-btn" onclick="switchTab('generate')">Generate</button>
+            <button class="tab-btn" onclick="switchTab('learn')">Learn</button>
+        </nav>
+
+        <!-- TAB 1: CHECKER SECTION -->
+        <section id="check-section" class="tab-content active">
+            <div class="input-group">
+                <input type="password" id="password-input" placeholder="Type a password to test...">
+                <button type="button" id="toggle-vis" onclick="togglePasswordVisibility()">Show</button>
+            </div>
+
+            <!-- Visual Strength Meter -->
+            <div class="meter-container">
+                <div class="meter-bar" id="meter-bar"></div>
+            </div>
+            <div class="meter-labels">
+                <span id="strength-label">Enter a password</span>
+                <span id="entropy-label">0 bits</span>
+            </div>
+
+            <!-- Crack Time Display -->
+            <div class="stats-box">
+                <p>Estimated crack time: <strong id="crack-time">Instant</strong></p>
+            </div>
+
+            <!-- Pattern Warnings Box -->
+            <div id="warnings-box" class="warnings-box" style="display: none;">
+                <strong>⚠️ Weakness detected:</strong>
+                <ul id="warnings-list"></ul>
+            </div>
+
+            <!-- Checklist Requirements -->
+            <ul class="checklist">
+                <li id="rule-len">At least 8 characters (12+ recommended)</li>
+                <li id="rule-up">At least 1 uppercase letter (A-Z)</li>
+                <li id="rule-low">At least 1 lowercase letter (a-z)</li>
+                <li id="rule-num">At least 1 number (0-9)</li>
+                <li id="rule-sym">At least 1 special character (!@#$%^&*)</li>
+            </ul>
+        </section>
+
+        <!-- TAB 2: GENERATOR SECTION -->
+        <section id="generate-section" class="tab-content">
+            <div class="control-group">
+                <label>Length: <span id="len-val">16</span></label>
+                <input type="range" id="gen-len" min="8" max="32" value="16" oninput="document.getElementById('len-val').innerText = this.value">
+            </div>
+
+            <div class="toggles">
+                <label><input type="checkbox" id="gen-up" checked> Uppercase (A-Z)</label>
+                <label><input type="checkbox" id="gen-low" checked> Lowercase (a-z)</label>
+                <label><input type="checkbox" id="gen-num" checked> Numbers (0-9)</label>
+                <label><input type="checkbox" id="gen-sym" checked> Symbols (!@#$%^&*)</label>
+                <label><input type="checkbox" id="gen-no-ambig"> Exclude ambiguous characters (I, l, 1, O, 0)</label>
+            </div>
+
+            <button class="btn-primary" onclick="generateBatch()">Generate 5 Passwords</button>
+
+            <!-- Generated Passwords List -->
+            <div id="password-list" class="password-list"></div>
+        </section>
+
+        <!-- TAB 3: LEARN SECTION -->
+        <section id="learn-section" class="tab-content">
+            <div class="learn-card">
+                <h3>What is Password Entropy?</h3>
+                <p>Entropy measures randomness in bits. Each additional character dramatically multiplies the combinations an attacker has to test.</p>
+            </div>
+            <div class="learn-card">
+                <h3>Why Length Beats Complexity</h3>
+                <p>A 16-character phrase like <code>blue-velvet-pancake-rocket</code> has vastly higher entropy than a complex 8-character string like <code>P@$$w0rd</code>, while being far easier to remember.</p>
+            </div>
+            <div class="learn-card">
+                <h3>NIST SP 800-63B Guidelines</h3>
+                <p>Modern standards recommend long passphrases, checking against known leaked breach lists, and using a password manager rather than forcing frequent arbitrary resets.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- SCRIPT LINK -->
+    <script src="/static/app.js"></script>
+</body>
+</html>
