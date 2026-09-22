@@ -1,31 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+    --bg-dark: #07090e;
+    --card-bg: rgba(13, 20, 36, 0.72);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-focus: rgba(56, 189, 248, 0.6);
+    --primary-cyan: #38bdf8;
+    --primary-blue: #2563eb;
+    --text-primary: #f8fafc;
+    --text-muted: #94a3b8;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 body {
-    background-color: #0f0f0f;
-    color: #e5e5e5;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
     display: flex;
     justify-content: center;
-    padding: 40px 16px;
+    align-items: center;
     min-height: 100vh;
+    padding: 32px 16px;
+    overflow-x: hidden;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Background Animated Canvas */
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .container {
     width: 100%;
-    max-width: 520px;
+    max-width: 530px;
+    position: relative;
+    z-index: 1;
 }
 
-/* Header & Logo */
+/* Dynamic Shield Logo Glow */
 header {
-    margin-bottom: 24px;
     text-align: center;
+    margin-bottom: 24px;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.logo-wrapper {
+    position: relative;
+    border-radius: 50%;
+    transition: filter 0.5s ease;
+    filter: drop-shadow(0 0 25px rgba(56, 189, 248, 0.35));
 }
 
 .app-logo {
@@ -33,242 +73,350 @@ header {
     height: 90px;
     object-fit: contain;
     margin-bottom: 12px;
-    filter: drop-shadow(0 4px 14px rgba(37, 99, 235, 0.45));
-    transition: transform 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: floatLogo 4s ease-in-out infinite;
 }
 
 .app-logo:hover {
-    transform: scale(1.05);
+    transform: scale(1.1) rotate(-3deg);
+}
+
+@keyframes floatLogo {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
 }
 
 header h1 {
-    font-size: 2rem;
-    color: #fff;
-    letter-spacing: -0.5px;
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, #ffffff 40%, var(--primary-cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .tagline {
-    font-size: 0.9rem;
-    color: #888;
+    font-size: 0.88rem;
+    color: var(--text-muted);
     margin-top: 6px;
+    font-weight: 500;
 }
 
-/* Tabs Navigation */
+/* Nav Tabs */
 .tabs {
     display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
+    gap: 6px;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid var(--border-subtle);
+    padding: 6px;
+    border-radius: 14px;
+    margin-bottom: 18px;
+    backdrop-filter: blur(14px);
 }
 
 .tab-btn {
     flex: 1;
     padding: 10px;
-    background: #1a1a1a;
-    border: 1px solid #333;
-    color: #888;
-    border-radius: 8px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    border-radius: 10px;
     cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
+    font-weight: 600;
+    font-size: 0.86rem;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tab-btn:hover {
-    color: #ccc;
-    border-color: #444;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.04);
 }
 
 .tab-btn.active {
-    background: #2563eb;
+    background: linear-gradient(135deg, var(--primary-blue), #1d4ed8);
     color: #fff;
-    border-color: #2563eb;
+    box-shadow: 0 4px 18px rgba(37, 99, 235, 0.4);
 }
 
-/* Tab Panels */
+/* Glass Card */
 .tab-content {
     display: none;
-    background: #161616;
-    border: 1px solid #262626;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    background: var(--card-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 26px;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .tab-content.active {
     display: block;
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Inputs & Buttons */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Password Input Field */
 .input-group {
+    position: relative;
     display: flex;
-    gap: 8px;
+    align-items: center;
     margin-bottom: 16px;
 }
 
 input[type="password"],
 input[type="text"] {
-    flex: 1;
-    padding: 12px 14px;
-    background: #0d0d0d;
-    border: 1px solid #333;
-    border-radius: 8px;
+    width: 100%;
+    padding: 14px 75px 14px 16px;
+    background: rgba(3, 7, 18, 0.7);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
     color: #fff;
-    font-size: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
     outline: none;
-    transition: border-color 0.2s ease;
+    transition: all 0.25s ease;
 }
 
 input[type="password"]:focus,
 input[type="text"]:focus {
-    border-color: #2563eb;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.18);
+    background: rgba(3, 7, 18, 0.9);
 }
 
-button {
-    cursor: pointer;
-    border: none;
+#toggle-vis {
+    position: absolute;
+    right: 8px;
+    padding: 7px 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
     border-radius: 8px;
-    padding: 0 16px;
-    background: #262626;
-    color: #fff;
-    font-weight: 500;
-    transition: background-color 0.2s ease;
-}
-
-button:hover {
-    background: #333;
-}
-
-.btn-primary {
-    width: 100%;
-    padding: 12px;
-    background: #10b981;
-    color: #fff;
+    font-size: 0.75rem;
     font-weight: 600;
-    font-size: 0.95rem;
-    margin-top: 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.btn-primary:hover {
-    background: #059669;
+#toggle-vis:hover {
+    background: rgba(255, 255, 255, 0.16);
 }
 
-/* Strength Meter */
+/* Glowing Dynamic Meter Bar */
 .meter-container {
-    height: 8px;
-    background: #262626;
-    border-radius: 4px;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 99px;
     overflow: hidden;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+    position: relative;
 }
 
 .meter-bar {
     height: 100%;
     width: 0%;
-    transition: width 0.3s ease, background-color 0.3s ease;
+    border-radius: 99px;
+    transition: width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.4s ease;
+    box-shadow: 0 0 14px currentColor;
 }
 
 .meter-labels {
     display: flex;
     justify-content: space-between;
     font-size: 0.85rem;
-    color: #aaa;
-    margin-bottom: 16px;
+    font-weight: 600;
+    margin-bottom: 18px;
 }
 
-/* Info Box */
+#entropy-label {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--primary-cyan);
+}
+
+/* Crack Stats Box */
 .stats-box {
-    background: #0d0d0d;
-    border: 1px solid #222;
-    border-radius: 8px;
-    padding: 12px 14px;
-    font-size: 0.9rem;
+    background: rgba(3, 7, 18, 0.55);
+    border: 1px solid var(--border-subtle);
+    border-left: 3px solid var(--primary-cyan);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.86rem;
+    color: var(--text-muted);
     margin-bottom: 16px;
+    transition: border-color 0.3s ease;
 }
 
-/* Warnings Box */
+.stats-box strong {
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Warning Badges */
 .warnings-box {
-    background: #2a1515;
-    border: 1px solid #7f1d1d;
+    background: rgba(239, 68, 68, 0.09);
+    border: 1px solid rgba(239, 68, 68, 0.35);
     color: #fca5a5;
-    padding: 12px 14px;
-    border-radius: 8px;
-    font-size: 0.85rem;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.82rem;
     margin-bottom: 16px;
+    animation: shake 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(3px); }
+    30%, 50%, 70% { transform: translateX(-3px); }
+    40%, 60% { transform: translateX(3px); }
 }
 
 .warnings-box ul {
     margin-top: 6px;
-    padding-left: 20px;
+    padding-left: 18px;
 }
 
-/* Checklist */
+/* Checklists with Pop Badges */
 .checklist {
     list-style: none;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 8px;
-    font-size: 0.85rem;
+    margin-top: 8px;
 }
 
 .checklist li {
-    color: #666;
+    font-size: 0.82rem;
+    color: var(--text-muted);
     display: flex;
     align-items: center;
-    gap: 8px;
-    transition: color 0.2s ease;
+    gap: 10px;
+    padding: 7px 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid transparent;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.checklist li::before {
-    content: "•";
-    font-size: 1.2rem;
+.checklist li .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.65rem;
+    font-weight: 800;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .checklist li.valid {
-    color: #10b981;
+    color: #fff;
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.2);
+    transform: translateX(4px);
 }
 
-.checklist li.valid::before {
-    content: "✓";
-    font-size: 0.95rem;
+.checklist li.valid .badge {
+    background: var(--success);
+    color: #fff;
+    transform: scale(1.15) rotate(360deg);
 }
 
-/* Generator Controls */
-.control-group,
-.toggles {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 8px;
+/* Sliders & Checkbox Controls */
+.control-group {
+    margin-bottom: 18px;
 }
 
 .control-group label {
     display: flex;
     justify-content: space-between;
-    font-size: 0.9rem;
-    color: #ccc;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.control-group label span {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--primary-cyan);
 }
 
 input[type="range"] {
-    accent-color: #2563eb;
+    width: 100%;
+    accent-color: var(--primary-cyan);
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 99px;
     cursor: pointer;
+}
+
+.toggles {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
 }
 
 .toggles label {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 0.9rem;
-    color: #ddd;
+    gap: 12px;
+    font-size: 0.86rem;
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border-subtle);
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toggles label:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 .toggles input[type="checkbox"] {
-    accent-color: #2563eb;
-    width: 16px;
-    height: 16px;
+    accent-color: var(--primary-blue);
+    width: 17px;
+    height: 17px;
     cursor: pointer;
 }
 
-/* Batch Passwords Display */
+/* Ripple Button Effect */
+.btn-primary {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 8px 24px -6px rgba(16, 185, 129, 0.45);
+    transition: all 0.25s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px -6px rgba(16, 185, 129, 0.55);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Staggered Slide-In Generated Passwords */
 .password-list {
     margin-top: 20px;
     display: flex;
@@ -280,55 +428,72 @@ input[type="range"] {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #0d0d0d;
-    border: 1px solid #262626;
+    background: rgba(3, 7, 18, 0.65);
+    border: 1px solid var(--border-subtle);
     padding: 10px 14px;
-    border-radius: 8px;
-    font-family: "Courier New", Courier, monospace;
-    font-size: 0.95rem;
-    color: #38bdf8;
-    word-break: break-all;
+    border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88rem;
+    color: var(--primary-cyan);
+    animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes popIn {
+    0% { opacity: 0; transform: translateY(12px) scale(0.96); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .password-item button {
-    background: #2563eb;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: var(--primary-cyan);
     padding: 6px 12px;
-    font-size: 0.8rem;
     border-radius: 6px;
-    white-space: nowrap;
-    margin-left: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .password-item button:hover {
-    background: #1d4ed8;
+    background: var(--primary-blue);
+    color: #fff;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.5);
 }
 
-/* Educational Cards */
+/* Interactive Learn Cards */
 .learn-card {
-    background: #0d0d0d;
-    border: 1px solid #262626;
-    border-radius: 8px;
+    background: rgba(3, 7, 18, 0.55);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
     padding: 16px;
     margin-bottom: 12px;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.learn-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(56, 189, 248, 0.3);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
 }
 
 .learn-card h3 {
-    font-size: 1rem;
-    color: #60a5fa;
+    font-size: 0.95rem;
+    color: var(--primary-cyan);
     margin-bottom: 6px;
 }
 
 .learn-card p {
-    font-size: 0.85rem;
-    color: #a1a1aa;
+    font-size: 0.84rem;
+    color: var(--text-muted);
     line-height: 1.5;
 }
 
 .learn-card code {
-    background: #1c1c1c;
-    border: 1px solid #333;
+    background: rgba(255, 255, 255, 0.08);
     padding: 2px 6px;
     border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
     color: #34d399;
-    font-family: monospace;
 }

@@ -8,10 +8,15 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+    <!-- Interactive Background Grid & Particles -->
+    <canvas id="bg-canvas"></canvas>
+
     <div class="container">
-        <!-- HEADER WITH LOGO -->
+        <!-- HEADER WITH DYNAMIC GLOWING LOGO -->
         <header>
-            <img src="/static/logo.png" alt="PassShield Logo" class="app-logo">
+            <div class="logo-wrapper" id="logo-glow-wrapper">
+                <img src="/static/logo.png" alt="PassShield Logo" class="app-logo">
+            </div>
             <h1>PassShield</h1>
             <p class="tagline">Real-time strength analysis, pattern detection & secure generation</p>
         </header>
@@ -26,17 +31,17 @@
         <!-- TAB 1: CHECKER SECTION -->
         <section id="check-section" class="tab-content active">
             <div class="input-group">
-                <input type="password" id="password-input" placeholder="Type a password to test...">
+                <input type="password" id="password-input" placeholder="Type a password to test..." autocomplete="off">
                 <button type="button" id="toggle-vis" onclick="togglePasswordVisibility()">Show</button>
             </div>
 
-            <!-- Visual Strength Meter -->
+            <!-- Dynamic Glow Meter -->
             <div class="meter-container">
                 <div class="meter-bar" id="meter-bar"></div>
             </div>
             <div class="meter-labels">
                 <span id="strength-label">Enter a password</span>
-                <span id="entropy-label">0 bits</span>
+                <span id="entropy-label"><span id="entropy-num">0</span> bits</span>
             </div>
 
             <!-- Crack Time Display -->
@@ -50,13 +55,13 @@
                 <ul id="warnings-list"></ul>
             </div>
 
-            <!-- Checklist Requirements -->
+            <!-- Checklist Requirements with Ripple/Bounce -->
             <ul class="checklist">
-                <li id="rule-len">At least 8 characters (12+ recommended)</li>
-                <li id="rule-up">At least 1 uppercase letter (A-Z)</li>
-                <li id="rule-low">At least 1 lowercase letter (a-z)</li>
-                <li id="rule-num">At least 1 number (0-9)</li>
-                <li id="rule-sym">At least 1 special character (!@#$%^&*)</li>
+                <li id="rule-len"><span class="badge">✕</span> At least 8 characters (12+ recommended)</li>
+                <li id="rule-up"><span class="badge">✕</span> At least 1 uppercase letter (A-Z)</li>
+                <li id="rule-low"><span class="badge">✕</span> At least 1 lowercase letter (a-z)</li>
+                <li id="rule-num"><span class="badge">✕</span> At least 1 number (0-9)</li>
+                <li id="rule-sym"><span class="badge">✕</span> At least 1 special character (!@#$%^&*)</li>
             </ul>
         </section>
 
@@ -75,30 +80,32 @@
                 <label><input type="checkbox" id="gen-no-ambig"> Exclude ambiguous characters (I, l, 1, O, 0)</label>
             </div>
 
-            <button class="btn-primary" onclick="generateBatch()">Generate 5 Passwords</button>
+            <button class="btn-primary ripple-btn" onclick="generateBatch(event)">
+                <span>⚡ Generate 5 Passwords</span>
+            </button>
 
-            <!-- Generated Passwords List -->
             <div id="password-list" class="password-list"></div>
         </section>
 
         <!-- TAB 3: LEARN SECTION -->
         <section id="learn-section" class="tab-content">
-            <div class="learn-card">
+            <div class="learn-card hover-glow">
                 <h3>What is Password Entropy?</h3>
-                <p>Entropy measures randomness in bits. Each additional character dramatically multiplies the combinations an attacker has to test.</p>
+                <p>Entropy measures randomness in bits. Each additional character exponentially multiplies the combinations an attacker has to compute.</p>
             </div>
-            <div class="learn-card">
+            <div class="learn-card hover-glow">
                 <h3>Why Length Beats Complexity</h3>
                 <p>A 16-character phrase like <code>blue-velvet-pancake-rocket</code> has vastly higher entropy than a complex 8-character string like <code>P@$$w0rd</code>, while being far easier to remember.</p>
             </div>
-            <div class="learn-card">
+            <div class="learn-card hover-glow">
                 <h3>NIST SP 800-63B Guidelines</h3>
-                <p>Modern standards recommend long passphrases, checking against known leaked breach lists, and using a password manager rather than forcing frequent arbitrary resets.</p>
+                <p>Modern standards recommend long passphrases, checking against known breach databases, and using password managers rather than forcing frequent arbitrary resets.</p>
             </div>
         </section>
     </div>
 
-    <!-- SCRIPT LINK -->
+    <!-- Confetti Library for celebrations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="/static/app.js"></script>
 </body>
 </html>
